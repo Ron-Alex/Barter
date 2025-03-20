@@ -1,6 +1,10 @@
 import './Navigation.css'
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate, NavLink } from 'react-router';
+import { useAuth0 } from '@auth0/auth0-react';
 const Navigation = ({signIn, onSignIn}) => {
+
+    const {isAuthenticated, loginWithRedirect} = useAuth0();
+
     return(
         <div className="navbar">
             <nav className='nav'>
@@ -13,12 +17,15 @@ const Navigation = ({signIn, onSignIn}) => {
                 
                 <Link to="/home" className='absolute left-4'> Home </Link>
                 
-                {signIn ? <Link to={"/home"} onClick={() => onSignIn(false)}>Sign Out</Link> : 
-                <>
-                <Link to="/signin">Sign In</Link>
-                <Link to="/Register">Register</Link>
-                </>
-                }
+                {isAuthenticated && (
+                    <Link to="/home">Sign Out</Link>
+                )}
+                {!isAuthenticated && (
+                    <>
+                    <Link to="/signin">Sign In</Link>
+                    <Link to="/register">Register</Link>
+                    </>
+                )}
                 
             </nav>
         </div>
